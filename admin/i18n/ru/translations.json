@@ -1,5 +1,7 @@
 {
-	"gira-homeserver adapter settings": "Настройки адаптера для gira-homeserver",
-	"option1": "Опция 1",
-	"option2": "вариант 2"
+    "gira-homeserver adapter settings": "Настройки адаптера для gira-homeserver",
+    "option1": "Опция 1",
+    "option2": "вариант 2",
+    "Homeserver IP": "IP-адрес домашнего сервера",
+    "Homeserver Port": "Порт домашнего сервера"
 }

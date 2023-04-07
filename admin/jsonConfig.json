@@ -2,15 +2,27 @@
 	"i18n": true,
 	"type": "panel",
 	"items": {
-		"option1": {
-			"type": "checkbox",
-			"label": "option1",
+		"serverIP": {
+			"type": "text",
+			"label": "Homeserver IP",
 			"newLine": true
 		},
-		"option2": {
+		"serverPort": {
+			"type": "number",
+			"min": 1,
+			"max": 65000,
+			"label": "Homeserver Port",
+			"newLine": false
+		},
+		"username":{
 			"type": "text",
-			"label": "option2",
+			"label": "Username",
 			"newLine": true
+		},
+		"password":{
+			"type": "password",
+			"label":"Password",
+			"newLine": false
 		}
 	}
 }
