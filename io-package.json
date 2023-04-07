@@ -1,112 +1,125 @@
 {
-    "common": {
-        "name": "gira-homeserver",
-        "version": "0.0.1",
-        "news": {
-            "0.0.1": {
-                "en": "initial release",
-                "de": "Erstveröffentlichung",
-                "ru": "Начальная версия",
-                "pt": "lançamento inicial",
-                "nl": "Eerste uitgave",
-                "fr": "Première version",
-                "it": "Versione iniziale",
-                "es": "Versión inicial",
-                "pl": "Pierwsze wydanie",
-                "zh-cn": "首次出版",
-                "uk": "початковий випуск"
-            }
-        },
-        "title": "Gira Homeserver",
-        "titleLang": {
-            "en": "Gira Homeserver",
-            "de": "Gira Homeserver",
-            "ru": "Домашний сервер Gira",
-            "pt": "Gira Homeserver",
-            "nl": "Gira Homeserver",
-            "fr": "Serveur domestique Gira",
-            "it": "Homeserver Gira",
-            "es": "Servidor doméstico Gira",
-            "pl": "Serwer domowy Gira",
-            "zh-cn": "Gira 家庭服务器",
-            "uk": "Домашній сервер Gira"
-        },
-        "desc": {
-            "en": "integrate your Gira Homeserver into iobroker",
-            "de": "integrieren Sie Ihren Gira Homeserver in iobroker",
-            "ru": "интегрируйте свой Gira Homeserver в iobroker",
-            "pt": "integre o seu Gira Homeserver no iobroker",
-            "nl": "integreer uw Gira Homeserver in iobroker",
-            "fr": "intégrez votre Gira Homeserver dans iobroker",
-            "it": "integra il tuo Gira Homeserver in iobroker",
-            "es": "integre su Gira Homeserver en iobroker",
-            "pl": "zintegruj swój Gira Homeserver z iobrokerem",
-            "zh-cn": "将您的 Gira Homeserver 集成到 iobroker",
-            "uk": "інтегруйте свій Gira Homeserver в iobroker"
-        },
-        "authors": [
-            "Carsten Bauer <home-system@magenta.de>"
-        ],
-        "keywords": [
-            "gira",
-            "homeserver",
-            "iot"
-        ],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "main": "main.js",
-        "icon": "gira-homeserver.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/baca89/ioBroker.gira-homeserver/main/admin/gira-homeserver.png",
-        "readme": "https://github.com/baca89/ioBroker.gira-homeserver/blob/main/README.md",
-        "loglevel": "info",
-        "mode": "daemon",
-        "type": "iot-systems",
-        "compact": true,
-        "connectionType": "local",
-        "dataSource": "poll",
-        "adminUI": {
-            "config": "json"
-        },
-        "dependencies": [
-            {
-                "js-controller": ">=3.3.22"
-            }
-        ],
-        "globalDependencies": [
-            {
-                "admin": ">=5.1.13"
-            }
-        ]
+  "common": {
+    "name": "gira-homeserver",
+    "version": "0.0.2-alpha.0",
+    "news": {
+      "0.0.2-alpha.0": {
+        "en": "initial release",
+        "de": "erstausstrahlung",
+        "ru": "начальный выпуск",
+        "pt": "lançamento inicial",
+        "nl": "niet",
+        "fr": "initial release",
+        "it": "rilascio iniziale",
+        "es": "liberación inicial",
+        "pl": "pierwsze wydanie",
+        "uk": "початковий реліз",
+        "zh-cn": "初步释放"
+      },
+      "0.0.1": {
+        "en": "initial release",
+        "de": "Erstveröffentlichung",
+        "ru": "Начальная версия",
+        "pt": "lançamento inicial",
+        "nl": "Eerste uitgave",
+        "fr": "Première version",
+        "it": "Versione iniziale",
+        "es": "Versión inicial",
+        "pl": "Pierwsze wydanie",
+        "zh-cn": "首次出版",
+        "uk": "початковий випуск"
+      }
     },
-    "native": {
-        "serverIP": "",
-        "serverPort": "443",
-        "username": "",
-        "password": ""
+    "title": "Gira Homeserver",
+    "titleLang": {
+      "en": "Gira Homeserver",
+      "de": "Gira Homeserver",
+      "ru": "Домашний сервер Gira",
+      "pt": "Gira Homeserver",
+      "nl": "Gira Homeserver",
+      "fr": "Serveur domestique Gira",
+      "it": "Homeserver Gira",
+      "es": "Servidor doméstico Gira",
+      "pl": "Serwer domowy Gira",
+      "zh-cn": "Gira 家庭服务器",
+      "uk": "Домашній сервер Gira"
     },
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "Device or service connected",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        }
+    "desc": {
+      "en": "integrate your Gira Homeserver into iobroker",
+      "de": "integrieren Sie Ihren Gira Homeserver in iobroker",
+      "ru": "интегрируйте свой Gira Homeserver в iobroker",
+      "pt": "integre o seu Gira Homeserver no iobroker",
+      "nl": "integreer uw Gira Homeserver in iobroker",
+      "fr": "intégrez votre Gira Homeserver dans iobroker",
+      "it": "integra il tuo Gira Homeserver in iobroker",
+      "es": "integre su Gira Homeserver en iobroker",
+      "pl": "zintegruj swój Gira Homeserver z iobrokerem",
+      "zh-cn": "将您的 Gira Homeserver 集成到 iobroker",
+      "uk": "інтегруйте свій Gira Homeserver в iobroker"
+    },
+    "authors": [
+      "Carsten Bauer <home-system@magenta.de>"
+    ],
+    "keywords": [
+      "gira",
+      "homeserver",
+      "iot"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "main": "main.js",
+    "icon": "gira-homeserver.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/baca89/ioBroker.gira-homeserver/main/admin/gira-homeserver.png",
+    "readme": "https://github.com/baca89/ioBroker.gira-homeserver/blob/main/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "iot-systems",
+    "compact": true,
+    "connectionType": "local",
+    "dataSource": "poll",
+    "adminUI": {
+      "config": "json"
+    },
+    "dependencies": [
+      {
+        "js-controller": ">=3.3.22"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=5.1.13"
+      }
     ]
+  },
+  "native": {
+    "serverIP": "",
+    "serverPort": "443",
+    "username": "",
+    "password": ""
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "Device or service connected",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
 }
