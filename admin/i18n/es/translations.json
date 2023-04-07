@@ -3,5 +3,7 @@
     "option1": "Opción 1",
     "option2": "opcion 2",
     "Homeserver IP": "IP del servidor doméstico",
-    "Homeserver Port": "Puerto del servidor doméstico"
+    "Homeserver Port": "Puerto del servidor doméstico",
+    "Username": "Nombre de usuario",
+    "Password": "Contraseña"
 }

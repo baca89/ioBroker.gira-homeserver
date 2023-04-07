@@ -3,5 +3,7 @@
     "option1": "варіант1",
     "option2": "варіант2",
     "Homeserver IP": "IP домашнього сервера",
-    "Homeserver Port": "Порт домашнього сервера"
+    "Homeserver Port": "Порт домашнього сервера",
+    "Username": "Ім'я користувача",
+    "Password": "Пароль"
 }

@@ -9,7 +9,8 @@
 const utils = require("@iobroker/adapter-core");
 
 // Load your modules here, e.g.:
-// const fs = require("fs");
+const axios = require("axios").default;
+const https = require("https");
 
 class GiraHomeserver extends utils.Adapter {
 
@@ -21,6 +22,13 @@ class GiraHomeserver extends utils.Adapter {
 			...options,
 			name: "gira-homeserver",
 		});
+
+		this.giraApiClient = null;
+		this.apiConnected = false;
+		this.httpsAgent = new https.Agent({
+			rejectUnauthorized: false
+		});
+
 		this.on("ready", this.onReady.bind(this));
 		this.on("stateChange", this.onStateChange.bind(this));
 		// this.on("objectChange", this.onObjectChange.bind(this));
@@ -32,15 +40,37 @@ class GiraHomeserver extends utils.Adapter {
 	 * Is called when databases are connected and adapter received configuration.
 	 */
 	async onReady() {
-		// Initialize your adapter here
+		// Checks the amdin-config:
+		if(!this.config.serverIP){
+			this.log.error(`Server IP is empty - please check instance configuration of ${this.namespace}`);
+			return;
+		}
+		if (!this.config.username || !this.config.password) {
+			this.log.error(`User name and/or user password empty - please check instance configuration of ${this.namespace}`);
+			return;
+		}
 
-		// Reset the connection indicator during startup
-		this.setState("info.connection", false, true);
+		this.log.info(`Instance ${this.namespace} starts with Server ${this.config.serverIP} on Port ${this.config.serverPort} with Username: ${this.config.username}`);
+		await this.setApiConnection(false);
+
+		this.girahomeserverclient = axios.create({
+			baseURL: `https://${this.config.serverIP}:${this.config.serverPort}/endpoints/`,
+			timeout: 2000,
+			responseType: "json",
+			responseEncoding: "utf8",
+			httpsAgent : this.httpsAgent
+		});
+
+		//subscribe all States
+		await this.subscribeStatesAsync("*");
 
 		// The adapters config (in the instance object everything under the attribute "native") is accessible via
 		// this.config:
 		this.log.info("Server IP " + this.config.serverIP);
 		this.log.info("Server Port: " + this.config.serverPort);
+		this.log.info("Username: " + this.config.username);
+
+		//TODO: ab hier weiter im Code
 
 		/*
 		For every state in the system there has to be also an object of type state
@@ -155,6 +185,11 @@ class GiraHomeserver extends utils.Adapter {
 	// 		}
 	// 	}
 	// }
+
+	async setApiConnection(status){
+		this.apiConnected = status;
+		await this.setStateChangedAsync(`info.connection`,{val : status, ack : true});
+	}
 
 }
 

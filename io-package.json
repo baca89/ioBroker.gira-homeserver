@@ -82,8 +82,8 @@
     "native": {
         "serverIP": "",
         "serverPort": "443",
-		"username": "",
-		"password": ""
+        "username": "",
+        "password": ""
     },
     "objects": [],
     "instanceObjects": [
