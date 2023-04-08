@@ -10,7 +10,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+<<<<<<< HEAD
         - uses: actions/checkout@v1
+=======
+        - uses: actions/checkout@v3
+>>>>>>> 3a0af68 (Update to Checkout v3)
         - name: todo-actions
           uses: dtinth/todo-actions@master
           env:
