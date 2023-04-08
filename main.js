@@ -76,8 +76,8 @@ class GiraHomeserver extends utils.Adapter {
 
 		// The adapters config (in the instance object everything under the attribute "native") is accessible via
 		// this.config:
-		this.log.info("Server IP " + this.config.serverIP);
-		this.log.info("Server Port: " + this.config.serverPort);
+		this.log.info("Server-IP " + this.config.serverIP);
+		this.log.info("Server-Port: " + this.config.serverPort);
 		this.log.info("Username: " + this.config.username);
 
 		//Abfrage aller Verfügbaren Kommunikationsobjekte
@@ -90,11 +90,14 @@ class GiraHomeserver extends utils.Adapter {
 			.then((response) => {
 				this.log.debug("Call of communication objects successfully");
 				this.setApiConnection(true);
-				// TODO function zum anlegen aller Kommunikationsobjekte
+				/**
+				 * TODO Funktion zur Anlage aller verfügbaren Datenpunkte
+				 * bisher werden die Datenpunkte noch nicht angelegt.
+				 */
 				const data = response.data.data.items;
 				/**
 				 * TODO Abfrage Statuscodes
-				 * Abfrage ob erfolgreich oder nciht
+				 * Abfrage ob erfolgreich oder nicht
 				 */
 				for (let i = 0; i < data.length; i++) {
 					const element = data[i];
