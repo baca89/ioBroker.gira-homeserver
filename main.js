@@ -76,6 +76,15 @@ class GiraHomeserver extends utils.Adapter {
 
 		//TODO: ab hier weiter im Code
 
+		const response = await this.girahomeserverclient.get("call", {
+			params: {
+				key: "CO:*"
+			}
+		});
+		this.log.debug(`Anfrage Statuscode: ${response.status}`);
+		this.log.debug(`Anfrage Statuscode: ${response.statusText}`);
+		this.log.debug(`${response.data}`);
+
 		/*
 		For every state in the system there has to be also an object of type state
 		Here a simple template for a boolean variable named "testVariable"
