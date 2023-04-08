@@ -92,7 +92,10 @@ class GiraHomeserver extends utils.Adapter {
 				this.setApiConnection(true);
 				// TODO function zum anlegen aller Kommunikationsobjekte
 				const data = response.data.data.items;
-				// TODO Abfrage der Statuscodes ob erfolgreich
+				/**
+				 * TODO Abfrage Statuscodes
+				 * Abfrage ob erfolgreich oder nciht
+				 */
 				for (let i = 0; i < data.length; i++) {
 					const element = data[i];
 					this.log.debug(util.inspect(element.caption));
