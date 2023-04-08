@@ -11,6 +11,8 @@ const utils = require("@iobroker/adapter-core");
 // Load your modules here, e.g.:
 const axios = require("axios").default;
 const https = require("https");
+const util = require("util");
+const HomeserverTypes = require(__dirname + "/lib/homeserverTypes.js");
 
 class GiraHomeserver extends utils.Adapter {
 
@@ -23,16 +25,19 @@ class GiraHomeserver extends utils.Adapter {
 			name: "gira-homeserver",
 		});
 
-		this.giraApiClient = null;
+		this.girahomeserverclient = null;
+		this.responseCOs = null;
 		this.apiConnected = false;
 		this.httpsAgent = new https.Agent({
 			rejectUnauthorized: false
 		});
 
 		this.on("ready", this.onReady.bind(this));
+
 		this.on("stateChange", this.onStateChange.bind(this));
 		// this.on("objectChange", this.onObjectChange.bind(this));
 		// this.on("message", this.onMessage.bind(this));
+
 		this.on("unload", this.onUnload.bind(this));
 	}
 
@@ -41,6 +46,7 @@ class GiraHomeserver extends utils.Adapter {
 	 */
 	async onReady() {
 		// Checks the amdin-config:
+		this.log.info("Adapter startet...");
 		if(!this.config.serverIP){
 			this.log.error(`Server IP is empty - please check instance configuration of ${this.namespace}`);
 			return;
@@ -51,12 +57,12 @@ class GiraHomeserver extends utils.Adapter {
 		}
 
 		this.log.info(`Instance ${this.namespace} starts with Server ${this.config.serverIP} on Port ${this.config.serverPort} with Username: ${this.config.username}`);
+
 		await this.setApiConnection(false);
 
 		this.girahomeserverclient = axios.create({
 			baseURL: `https://${this.config.serverIP}:${this.config.serverPort}/endpoints/`,
 			timeout: 2000,
-			responseType: "json",
 			responseEncoding: "utf8",
 			httpsAgent : this.httpsAgent,
 			auth: {
@@ -74,22 +80,52 @@ class GiraHomeserver extends utils.Adapter {
 		this.log.info("Server Port: " + this.config.serverPort);
 		this.log.info("Username: " + this.config.username);
 
-		//TODO: ab hier weiter im Code
+		//Abfrage aller Verfügbaren Kommunikationsobjekte
+		await this.girahomeserverclient.get("select",
+			{params:{
+				method: "get",
+				key: "CO@*",
+				meta: true}
+			})
+			.then((response) => {
+				this.log.debug("Call of communication objects successfully");
+				this.setApiConnection(true);
+				//TODO function für alle Kommunikationsobjekte
+				const data = response.data.data.items;
+				for (let i = 0; i < data.length; i++) {
+					const element = data[i];
+					this.log.debug(util.inspect(element.caption));
+				}
+			}).catch((error)=>{
+				this.log.debug("Call mit Fehler ausgeführt");
+				this.log.debug(util.inspect(error.response));
+				this.log.error(error);
+				return;
+			});
 
-		const response = await this.girahomeserverclient.get("call", {
-			params: {
-				key: "CO:*"
-			}
-		});
-		this.log.debug(`Anfrage Statuscode: ${response.status}`);
-		this.log.debug(`Anfrage Statuscode: ${response.statusText}`);
-		this.log.debug(`${response.data}`);
+		// this.response = await this.girahomeserverclient.get("call", {
+		// 	params: {
+		// 		key: "CO:*"
+		// 	}
+
+
+		// }).catch(err => {this.log.error(err);})
+		// 	.finally(()=>{
+		// 		this.log.debug(`Anfrage Statuscode: ${this.response.status}`);
+		// 		this.log.debug(`Anfrage Statuscode: ${this.response.statusText}`);
+		// 		this.log.debug(`${this.response.data}`);
+		// 	});
+
+
+
+
 
 		/*
 		For every state in the system there has to be also an object of type state
 		Here a simple template for a boolean variable named "testVariable"
 		Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
 		*/
+
 		await this.setObjectNotExistsAsync("testVariable", {
 			type: "state",
 			common: {
@@ -103,6 +139,7 @@ class GiraHomeserver extends utils.Adapter {
 		});
 
 		// In order to get state updates, you need to subscribe to them. The following line adds a subscription for our variable we have created above.
+
 		this.subscribeStates("testVariable");
 		// You can also add a subscription for multiple states. The following line watches all states starting with "lights."
 		// this.subscribeStates("lights.*");
@@ -114,27 +151,36 @@ class GiraHomeserver extends utils.Adapter {
 			you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
 		*/
 		// the variable testVariable is set to true as command (ack=false)
+
 		await this.setStateAsync("testVariable", true);
 
 		// same thing, but the value is flagged "ack"
 		// ack should be always set to true if the value is received from or acknowledged from the target system
+
 		await this.setStateAsync("testVariable", { val: true, ack: true });
 
 		// same thing, but the state is deleted after 30s (getState will return null afterwards)
+
 		await this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
 
 		// examples for the checkPassword/checkGroup functions
+
 		let result = await this.checkPasswordAsync("admin", "iobroker");
+
 		this.log.info("check user admin pw iobroker: " + result);
 
+
 		result = await this.checkGroupAsync("admin", "admin");
+
 		this.log.info("check group user admin group admin: " + result);
+
 	}
 
 	/**
 	 * Is called when adapter shuts down - callback has to be called under any circumstances!
 	 * @param {() => void} callback
 	 */
+
 	onUnload(callback) {
 		try {
 			// Here you must clear all timeouts or intervals that may still be active
@@ -143,8 +189,10 @@ class GiraHomeserver extends utils.Adapter {
 			// ...
 			// clearInterval(interval1);
 
+
 			callback();
 		} catch (e) {
+
 			callback();
 		}
 	}
@@ -171,12 +219,16 @@ class GiraHomeserver extends utils.Adapter {
 	 * @param {string} id
 	 * @param {ioBroker.State | null | undefined} state
 	 */
+
 	onStateChange(id, state) {
+
 		if (state) {
 			// The state was changed
+
 			this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
 		} else {
 			// The state was deleted
+
 			this.log.info(`state ${id} deleted`);
 		}
 	}
@@ -198,11 +250,29 @@ class GiraHomeserver extends utils.Adapter {
 	// 		}
 	// 	}
 	// }
+	async addDatapoint(data){
+		if(data.meta.grpadr){
+			await this.setObjectNotExistsAsync(data.caption, {
+				type: "state",
+				common: {
+					name: data.caption,
+					type: HomeserverTypes.getTypeOfGiraDatapoint(data.meta.format),
+					role: "indicator",
+					read: true,
+					write: true,
+				},
+				native: {},
+			});
+		}
+	}
 
 	async setApiConnection(status){
+
 		this.apiConnected = status;
+
 		await this.setStateChangedAsync(`info.connection`,{val : status, ack : true});
 	}
+
 
 }
 
