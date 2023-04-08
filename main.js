@@ -58,7 +58,11 @@ class GiraHomeserver extends utils.Adapter {
 			timeout: 2000,
 			responseType: "json",
 			responseEncoding: "utf8",
-			httpsAgent : this.httpsAgent
+			httpsAgent : this.httpsAgent,
+			auth: {
+				username: this.config.username,
+				password: this.config.password
+			}
 		});
 
 		//subscribe all States
