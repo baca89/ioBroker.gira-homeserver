@@ -102,7 +102,7 @@ class GiraHomeserver extends utils.Adapter {
 				 */
 				for (let i = 0; i < data.length; i++) {
 					const element = data[i];
-					this.log.debug(util.inspect(element.caption));
+					this.addDatapoint(element);
 				}
 			}).catch((error)=>{
 				this.log.debug("Call mit Fehler ausgeführt");
@@ -260,7 +260,8 @@ class GiraHomeserver extends utils.Adapter {
 	// }
 	async addDatapoint(data){
 		if(data.meta.grpadr){
-			await this.setObjectNotExistsAsync(data.caption, {
+			const datapoint = data.meta.grpadr.replace("/", ".").replace("/", ".")+ "-" + data.caption;
+			await this.setObjectNotExistsAsync(datapoint, {
 				type: "state",
 				common: {
 					name: data.caption,
@@ -268,10 +269,50 @@ class GiraHomeserver extends utils.Adapter {
 					role: "indicator",
 					read: true,
 					write: true,
+					custom: {
+						ID: data.meta.keys[0],
+						grpadr: data.meta.grpadr
+					}
 				},
 				native: {},
 			});
+			this.log.info("Datenpunkt "+ grpAdress + data.caption + "angelegt.");
 		}
+	}
+
+
+	async getValueOfCO (id){
+		const datapoint = this.getObjectAsync(id);
+		await this.girahomeserverclient.get("call",
+			{params:{
+				method: "get",
+				key: datapoint.common.custom.ID
+			}
+			})
+			.then((response) => {
+				this.setStateAsync(id, response.data.data.value);
+			}).catch((error)=>{
+				this.log.debug(util.inspect(error.response));
+				this.log.error(error);
+				return;
+			});
+
+		// this.response = await this.girahomeserverclient.get("call", {
+		// 	params: {
+		// 		key: "CO:*"
+		// 	}
+
+
+		// }).catch(err => {this.log.error(err);})
+		// 	.finally(()=>{
+		// 		this.log.debug(`Anfrage Statuscode: ${this.response.status}`);
+		// 		this.log.debug(`Anfrage Statuscode: ${this.response.statusText}`);
+		// 		this.log.debug(`${this.response.data}`);
+		// 	});
+
+
+
+
 	}
 
 	async setApiConnection(status){
@@ -294,3 +335,9 @@ if (require.main !== module) {
 	// otherwise start the instance directly
 	new GiraHomeserver();
 }
+
+
+/**
+				 * TODO Timer mit For-Schleife
+				 * Werte von allen Elementen abfragen mit Timer
+				 */
