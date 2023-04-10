@@ -103,4 +103,3 @@ describe("homeserverTypes => getTypeOfGiraDatapoint", () => {
 		expect(() => {getTypeOfGiraDatapoint("1");}).to.throw("parameter have to be of type number");
 	});
 });
-

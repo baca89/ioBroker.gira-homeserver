@@ -98,6 +98,7 @@ class GiraHomeserver extends utils.Adapter {
 				/**
 				 * TODO Abfrage Statuscodes
 				 * Abfrage ob erfolgreich oder nicht
+				 * Statuscode 0?
 				 */
 				for (let i = 0; i < data.length; i++) {
 					const element = data[i];
