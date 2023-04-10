@@ -71,7 +71,7 @@ class GiraHomeserver extends utils.Adapter {
 			}
 		});
 
-		//subscribe all States
+		//subscribe all State
 		await this.subscribeStatesAsync("*");
 
 		// The adapters config (in the instance object everything under the attribute "native") is accessible via
@@ -276,16 +276,18 @@ class GiraHomeserver extends utils.Adapter {
 				},
 				native: {},
 			});
-			this.log.info("Datenpunkt "+ grpAdress + data.caption + "angelegt.");
+			this.log.info("Datenpunkt "+ datapoint + "angelegt.");
 		}
 	}
 
 
 	async getValueOfCO (id){
 		const datapoint = this.getObjectAsync(id);
+		// @ts-ignore
 		await this.girahomeserverclient.get("call",
 			{params:{
 				method: "get",
+				// @ts-ignore
 				key: datapoint.common.custom.ID
 			}
 			})
