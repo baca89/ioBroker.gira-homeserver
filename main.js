@@ -84,51 +84,6 @@ class GiraHomeserver extends utils.Adapter {
 		this.log.info("Server-Port: " + this.config.serverPort);
 		this.log.info("Username: " + this.config.username);
 
-		//Abfrage aller Verfügbaren Kommunikationsobjekte
-		// await this.girahomeserverclient.get("select",
-		// 	{params:{
-		// 		method: "get",
-		// 		key: "CO@*",
-		// 		meta: true}
-		// 	})
-		// 	.then((response) => {
-		// 		this.log.debug("Call of communication objects successfully");
-		// 		this.setApiConnection(true);
-		// 		/**
-		// 		 * TODO Funktion zur Anlage aller verfügbaren Datenpunkte
-		// 		 * bisher werden die Datenpunkte noch nicht angelegt.
-		// 		 */
-		// 		const data = response.data.data.items;
-		// 		/**
-		// 		 * TODO Abfrage Statuscodes
-		// 		 * Abfrage ob erfolgreich oder nicht
-		// 		 * Statuscode 0?
-		// 		 */
-		// 		for (let i = 0; i < data.length; i++) {
-		// 			const element = data[i];
-		// 			this.addDatapoint(element);
-		// 		}
-		// 	}).catch((error)=>{
-		// 		this.log.debug("Call mit Fehler ausgeführt");
-		// 		this.log.debug(util.inspect(error.response));
-		// 		this.log.error(error);
-		// 		return;
-		// 	});
-
-		// this.response = await this.girahomeserverclient.get("call", {
-		// 	params: {
-		// 		key: "CO:*"
-		// 	}
-
-
-		// }).catch(err => {this.log.error(err);})
-		// 	.finally(()=>{
-		// 		this.log.debug(`Anfrage Statuscode: ${this.response.status}`);
-		// 		this.log.debug(`Anfrage Statuscode: ${this.response.statusText}`);
-		// 		this.log.debug(`${this.response.data}`);
-		// 	});
-
-
 
 
 
