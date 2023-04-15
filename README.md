@@ -95,6 +95,11 @@ Please refer to the [`dev-server` documentation](https://github.com/ioBroker/dev
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* Abfrage per Websocket
+* Anlage neuer Datenpunkte
+* Aktualisierung der Werte bei Änderungen im HS
+
 ### 0.0.2-alpha.0 (2023-04-07)
 * (Carsten Bauer) initial release
 
