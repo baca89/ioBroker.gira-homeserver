@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "gira-homeserver",
-    "version": "0.0.2-alpha.0",
+    "version": "0.1.0",
     "news": {
+      "0.1.0": {
+        "en": "Abfrage per Websocket\nAnlage neuer Datenpunkte\nAktualisierung der Werte bei Änderungen im HS",
+        "de": "Anfrage per Websocket\nAnlage neuer Datenpunkte\nAktualisierung der Werte bei Änderungen im HS",
+        "ru": "Абфража в Websocket\nAnlage neuer Datenpunkte\nAktualisierung der Werte bei Änderungen им HS",
+        "pt": "Abfragem por Websocket\nAnlage neuer Datenpunkte\nInformaÃ§Ã£o Importante",
+        "nl": "Abfrage per Websocket\nAnlage neuer Datenpun\nVertaling:",
+        "fr": "Abfrage par Websocket\nAnlage neuer Datenpunkte\nAktualisierung der Werte bei Änderungen im HS",
+        "it": "Abfrage per Websocket\nAnlage neuer Datenpunkte\nAktualisierung der Werte bei Änderungen im HS",
+        "es": "Abfrage per Websocket\nAnlage neuer Datenpunkte\nAktualisierung der Werte bei Änderungen im HS",
+        "pl": "Strona internetowa\nAnlage neuer Datenpunkte (ang.)\nWykaz gatunków Aktualisierung der Werte bei",
+        "uk": "Зловживання на Websocket\nAnlage neuer датаnpunkte\nAktualisierung дер Werte bei leenderungen im HS",
+        "zh-cn": "A. 每个网站的散播\nAlage Neuernpunkte\nAktualisierungder Werte i 1968nderungen HS"
+      },
       "0.0.2-alpha.0": {
         "en": "initial release",
         "de": "erstausstrahlung",
