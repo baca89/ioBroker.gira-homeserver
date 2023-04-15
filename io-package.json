@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "gira-homeserver",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "news": {
+      "0.1.1": {
+        "en": "Stabilität verbessert\nFilterung der Dantepunkte nach kompatiblen Typen",
+        "de": "Das ist gut\nFilterung der Dantepunkte nach kompatiblen ANHANG",
+        "ru": "Stabilität verbessert\nФильтрung der Dantepunkte nach kompatiblen Тип",
+        "pt": "InformaÃ§Ã£o relacionada\nFiltrar por Dantepunkte nach kompatiblen Tipo",
+        "nl": "Vertaling:\nFilterung der Dantepunkte nach kompatible Typen",
+        "fr": "Stabilität verbessert\nFilterung der Dantepunkte nach kompatiblen Typen",
+        "it": "Stabilität verbessert\nFiltraggio di Dantepunkte nach kompatiblen Tipologia",
+        "es": "Stabilität verbessert\nFilterung der Dantepunkte nach kompatiblen Tipo",
+        "pl": "Stabilitacja czasowników\nPoszukiwania Dantepunku Typen",
+        "uk": "Stabilität діє\nФільтрунг дер Dantepunkte nach kompatiblen Типи",
+        "zh-cn": "稳定州\nFilterungder Dantepunkte nach kompatablen 类型"
+      },
       "0.1.0": {
         "en": "Abfrage per Websocket\nAnlage neuer Datenpunkte\nAktualisierung der Werte bei Änderungen im HS",
         "de": "Anfrage per Websocket\nAnlage neuer Datenpunkte\nAktualisierung der Werte bei Änderungen im HS",
