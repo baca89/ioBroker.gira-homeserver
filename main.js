@@ -34,7 +34,7 @@ class GiraHomeserver extends utils.Adapter {
 		this.httpsAgent = new https.Agent({
 			rejectUnauthorized: false
 		});
-
+		this.Datapoints = [];
 
 		this.on("ready", this.onReady.bind(this));
 
@@ -73,7 +73,7 @@ class GiraHomeserver extends utils.Adapter {
 
 
 
-
+		this.log.debug(util.inspect(this.Datapoints, true, 5, true));
 
 		//subscribe all State
 		await this.subscribeStatesAsync("*");
@@ -265,25 +265,40 @@ class GiraHomeserver extends utils.Adapter {
 
 
 
+	/**
+	 * @param {{ meta: { grpadr: string; format: any; keys: any[]; }; caption: string; }} data
+	 */
 	async addDatapoint(data){
 		if(data.meta.grpadr){
-			const datapoint = data.meta.grpadr.replace("/", ".").replace("/", ".")+ "-" + data.caption;
-			await this.setObjectNotExistsAsync(datapoint, {
-				type: "state",
-				common: {
-					name: data.caption,
-					type: HomeserverTypes.getTypeOfGiraDatapoint(data.meta.format),
-					role: "indicator",
-					read: true,
-					write: true,
-					custom: {
-						ID: data.meta.keys[0],
-						grpadr: data.meta.grpadr
-					}
-				},
-				native: {},
-			});
-			this.log.info("Datenpunkt "+ datapoint + "angelegt.");
+			if (HomeserverTypes.getTypeOfGiraDatapoint(data.meta.format)===false){
+				return;
+			}else{
+				const datapointName = data.meta.grpadr.replace("/", ".").replace("/", ".")+ "-" + data.caption;
+				await this.setObjectNotExistsAsync(datapointName, {
+					type: "state",
+					common: {
+						name: data.caption,
+						type: HomeserverTypes.getTypeOfGiraDatapoint(data.meta.format),
+						role: "indicator",
+						read: true,
+						write: true,
+						custom: {
+							ID: data.meta.keys[0],
+							grpadr: data.meta.grpadr
+						}
+					},
+					native: {},
+				});
+				this.log.debug("Datenpunkt "+ datapointName + " angelegt.");
+
+				const newDatapoint= {
+					id: datapointName,
+					co: data.meta.keys[0],
+					coAdress : data.meta.keys[1]
+				};
+				this.Datapoints.push(newDatapoint);
+				this.subscribeDatapoints(newDatapoint);
+			}
 		}
 	}
 
@@ -303,7 +318,7 @@ class GiraHomeserver extends utils.Adapter {
 				this.log.info("Websocket verbunden.");
 				this.setApiConnection(true);
 				this.connection = conn;
-				this.subcribeDatapoints();
+				this.getDatapoints();
 			});
 		}
 		else{
@@ -311,45 +326,87 @@ class GiraHomeserver extends utils.Adapter {
 		}
 	}
 
-	async subcribeDatapoints(){
+	// @ts-ignore
+	/**
+	 * @param {{ co: string; id: string; coAdress: string; }} datapoint
+	 */
+	async subscribeDatapoints(datapoint){
 		if (this.connection){
-			this.log.debug("subscribing Datapoints...");
+			const coArray = [datapoint.co];
+			this.log.debug(coArray[0]);
+
+			this.connection.send(JSON.stringify(
+				{
+					type : "subscribe",
+					param: {
+						keys: coArray,
+						context: "subscribe - " + datapoint.id
+					}
+				}
+			));
+		}
+	}
+
+	async getDatapoints(){
+		if (this.connection){
+			this.log.debug("getting Datapoints...");
 			this.connection.send(JSON.stringify(
 				{
 					type : "select",
 					param: {
-						key: "CO@4*",
+						key: "CO@*",
 						meta: true,
-						context: "TEST CONTEXT"
+						context: "select"
 					}
 				}
 			));
 
-			this.connection.on("message", (msg)=>{
-				// @ts-ignore
-				this.log.debug("incomming Data: " + util.inspect (JSON.parse(msg.utf8Data),true,5, true));
+			this.connection.on("message", async (msg)=>{
+
 
 				// @ts-ignore
-				const response = JSON.parse(msg.utf8Data).data.items;
+				const response = JSON.parse(msg.utf8Data);
 
-				if (response){
-					//Create States if not exist
-					for (let i = 0; i < response.length; i++) {
-						const element = response[i];
-						this.log.debug(util.inspect(element, true, 5, true));
+				// @ts-ignore
+				this.log.debug("incomming Data: " + util.inspect (response,true,5, true));
+				if(response.type == "select")
+				{
+					this.log.debug("select - type-Message");
+					// @ts-ignore
+					const items = response.data.items;
+
+					if (items){
+					//Create States if not exists
+						for (let i = 0; i < items.length; i++) {
+							const element = items[i];
+							await this.addDatapoint(element);
+						}
 					}
 				}
-				// 	// items.array.forEach(item => {
-				// 	// 	//this.addDatapoint(item);
-				// 	// });
-				// }
-				// else if (response.data){
-				// 	//Updating State
-				// }
-				// response.array.forEach(element => {
-				// 	this.log.debug(element.key);
-				// });
-			});
+				else if(response.type == "push"){
+					this.log.debug("push - type-Message");
+					let datapointID;
+
+					for (let i = 0; i < this.Datapoints.length; i++) {
+
+						if (this.Datapoints[i].co == response.subscription.key){
+							datapointID = this.Datapoints[i].id;
+						}
+
+					}
+
+					if (datapointID){
+						await this.setStateAsync(datapointID, response.data.value, true).catch((err)=>{
+							this.log.error(err);
+						});
+					}
+				}
+			}
+
+
+
+
+			);
 		}
 		else{
 			this.log.debug("Connection not set...");
@@ -374,29 +431,6 @@ class GiraHomeserver extends utils.Adapter {
 	}
 
 
-	/**
-	 * @param {string} id
-	 */
-	async getValueOfCO (id){
-		const datapoint = this.getObjectAsync(id);
-		// @ts-ignore
-		await this.girahomeserverclient.get("call",
-			{params:{
-				method: "get",
-				// @ts-ignore
-				key: datapoint.common.custom.ID
-			}
-			})
-			.then((response) => {
-				this.setStateAsync(id, response.data.data.value);
-			}).catch((error)=>{
-				this.log.debug(util.inspect(error.response));
-				this.log.error(error);
-				return;
-			});
-
-	}
-
 	async setApiConnection(status){
 		this.apiConnected = status;
 		await this.setStateChangedAsync(`info.connection`,{val : status, ack : true});
@@ -415,9 +449,3 @@ if (require.main !== module) {
 	// otherwise start the instance directly
 	new GiraHomeserver();
 }
-
-
-/**
-				 * TODO Timer mit For-Schleife
-				 * Werte von allen Elementen abfragen mit Timer
-				 */
