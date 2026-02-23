@@ -21,7 +21,7 @@
     "node": ">= 14"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.6.8",
+    "@iobroker/adapter-core": "^3.3.2",
     "axios": "^1.13.5",
     "util": "^0.12.5",
     "websocket": "^1.0.34",
