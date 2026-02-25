@@ -6,7 +6,7 @@ updates:
       interval: daily
       time: "04:00"
       timezone: Europe/Berlin
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 40
     assignees:
       - baca89
     versioning-strategy: increase
